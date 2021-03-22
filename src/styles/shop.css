@@ -1,0 +1,13 @@
+.shop-title{
+  text-align: center;
+}
+.shop-items {
+  display: flex;
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+
+
+@import './shop-item.css';

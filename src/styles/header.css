@@ -1,0 +1,22 @@
+header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  background-color: black;
+  color: white;
+}
+
+.brand-name {
+  margin-left: 10vw;
+}
+
+.nav-list {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-evenly;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
