@@ -1,9 +1,21 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom"
 
 const Header = ({cartItemCount}) => {
+  const [isHome, setIsHome] = useState(false);
+  const location = useLocation();
+
+  useEffect(()=>{
+    if (location.pathname === '/') {
+      setIsHome(true);
+    }else{
+      setIsHome(false);
+    }
+  })
+
   return (
-    <header>
-      <div className="brand-name">kick stop</div>
+    <header className={isHome ? 'header-home' : ''}>
+      <div className="brand-name">Produce</div>
       <nav>
         <ul className="nav-list">
           <li><Link to="/" >Home</Link></li>

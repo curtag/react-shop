@@ -16,6 +16,38 @@ function App() {
   const getItemQty = (id) => {
     return (cartItems.filter((item) => item.id == id)[0])?.qty || 0
   }
+
+  const updateItemQty = (id, value) => {
+    const qty = getItemQty(id) + value;
+    const otherItems = (cartItems.filter((item) => item.id !== id.toString()));
+    setCartItems([...otherItems, {id: id.toString(), qty: qty}]);
+  }
+
+  const addToCart = (id, qty) => {
+    console.log('adding');
+    //no items in cart add first item
+    if (cartItems.length === 0){
+      console.log(1);
+      setCartItems([{id: id, qty: qty}]);
+    }else{
+      //we don't need to update any of our other items, only the current one
+      const otherItems = (cartItems.filter((item) => item.id.toString() !== id.toString()));
+      //Only add/keep items in cart that have a quantity
+      if (qty !== 0){
+        console.log(2);
+        setCartItems([...otherItems, {id: id.toString(), qty: qty}]);
+      }else{
+        console.log(3);
+        setCartItems([...otherItems]);
+      }
+    }
+  }
+
+  const removeFromCart = (id) => {
+    const otherItems = (cartItems.filter((item) => item.id.toString() !== id.toString()));
+    setCartItems(...[otherItems]);
+  }
+
   const getCartTotal = () => {
     // shopItems.filter((item) => item.id === parseInt(obj.id));
     return (cartItems.reduce(function (acc, obj) {return acc + (obj.qty * shopItems.filter((item) => item.id === parseInt(obj.id))[0].price)}, 0));
@@ -64,6 +96,10 @@ function App() {
                 incrementItemCount={incrementItemCount}
                 decrementItemCount={decrementItemCount}
                 updateItemCount={updateItemCount}
+                addToCart={addToCart}
+                removeFromCart={removeFromCart}
+                updateItemQty={updateItemQty}
+
               />
             )}
           />
@@ -79,6 +115,8 @@ function App() {
               incrementItemCount={incrementItemCount}
               decrementItemCount={decrementItemCount}
               updateItemCount={updateItemCount}
+              addToCart={addToCart}
+              removeFromCart={removeFromCart}
             />
           </Route>
           <Route exact path="/shop">

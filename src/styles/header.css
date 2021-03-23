@@ -2,7 +2,15 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  background-color: black;
+  background-color: white;
+  color: black;
+  padding: 1rem 0rem 1rem 0rem;
+  position: absolute;
+  width: 100%;
+}
+
+.header-home {
+  background-color: transparent;
   color: white;
 }
 
@@ -14,6 +22,7 @@ header {
   display: flex;
   list-style-type: none;
   justify-content: space-evenly;
+  margin: 0rem 0rem 0rem 0rem;
 }
 
 a {

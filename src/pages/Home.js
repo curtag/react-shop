@@ -1,5 +1,15 @@
+import bgImage from '../data/images/bg-bw.jpg'
 const Home = () => {
-  return <div>This is home.</div>
+  return (
+    <div 
+      className="home-container"
+      style={{
+        backgroundImage: `url(${bgImage})`
+      }}
+    >
+      This is home.
+    </div>
+  )
 }
 
 export default Home

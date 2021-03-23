@@ -1,5 +1,7 @@
 @import './header.css';
 @import './shop.css';
+@import './home.css';
+@import './cart.css';
 
 body {
   margin: 0;
@@ -16,3 +18,4 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
