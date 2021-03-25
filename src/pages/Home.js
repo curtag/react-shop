@@ -1,14 +1,9 @@
+import { Box } from '@chakra-ui/layout'
 import bgImage from '../data/images/bg-bw.jpg'
 const Home = () => {
   return (
-    <div 
-      className="home-container"
-      style={{
-        backgroundImage: `url(${bgImage})`
-      }}
-    >
-      This is home.
-    </div>
+    <Box height="100vh" backgroundSize="cover" backgroundImage={`url(${bgImage})`} pt="10rem">
+    </Box>
   )
 }
 

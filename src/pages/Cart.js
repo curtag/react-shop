@@ -1,30 +1,110 @@
+import { Button } from "@chakra-ui/button";
+import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import Item from "../components/cart/Item";
 
-const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, incrementItemCount, decrementItemCount, updateItemCount, addToCart, removeFromCart}) => {
+const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, incrementItemCount, decrementItemCount, updateItemCount, addToCart, removeFromCart}) => {
   const cartIds =  cartItems.map((item) => item.id);
   const shopItemsToRender = shopItems.filter((item) => cartIds.includes(item.id.toString()));
+
+  const handleCheckout = () => {
+    alert("You can't afford that. Lol.")
+  }
+
+  const ShopItems = () => {
+    return (
+      shopItemsToRender.map((item) => (
+        <Item 
+          id={item.id} 
+          getItemQty={getItemQty} 
+          shopItems={shopItems} 
+          incrementItemCount={incrementItemCount} 
+          decrementItemCount={decrementItemCount} 
+          updateItemCount={updateItemCount} 
+          addToCart={addToCart}
+          removeFromCart={removeFromCart}
+        />
+      ))
+    )
+  }
+
+  const EmptyCart = () => {
+    return (
+      <Heading as="h2" size="lg" fontWeight="normal">Your Bag is Empty</Heading>
+    )
+  }
+
   return (
-    <div className="cart-container">
-      <h1 className="cart-title">Cart</h1>
-      <div className="cart-items">
-        {shopItemsToRender.length !== 0 ? 
-          shopItemsToRender.map((item) => (
-            <Item 
-              id={item.id} 
-              getItemQty={getItemQty} 
-              shopItems={shopItems} 
-              incrementItemCount={incrementItemCount} 
-              decrementItemCount={decrementItemCount} 
-              updateItemCount={updateItemCount} 
-              addToCart={addToCart}
-              removeFromCart={removeFromCart}
-            />
-          ))
-          : 
-            <div>It looks like you're afraid to spend money. Go buy stuff.</div>}
-        <div>Total: ${getCartTotal().toFixed(2)}</div>
-      </div>
-    </div>
+    <Box pt="8rem" backgroundColor="rgba(0,0,0, .125)" height="100%"  pb="3rem">
+      <Box width="90%" mx="auto" backgroundColor="white" boxShadow="dark-lg" borderRadius="md">
+        <Box width="95%" mx="auto">
+          <Heading 
+            as="h1" 
+            size="lg" 
+            py={3} 
+            pt="2rem" 
+            borderBottom="1px"
+            textAlign={{
+              base: "center",
+              md: "center",
+              xl: "left"
+            }}
+          >
+            Items in Your Bag
+          </Heading>
+          <Box>
+            {shopItemsToRender.length !== 0 ? <ShopItems/> : <EmptyCart/>}
+          </Box>
+          <Flex 
+            justifyContent="end"
+            pt="1rem"
+          >
+            <VStack 
+              width={{
+                base: "100%",
+                md: "40%",
+                xl: "40%"
+              }}
+              alignContent="end" 
+              justifyContent="end" 
+              justifySelf="end" 
+              align={{
+                base: "center",
+                md: "self-end",
+                xl: "self-end"
+              }}
+            >
+              <HStack justifyContent="right">
+                <Text width="8rem">Bag Subtotal</Text>
+                <Text align="right" width="8rem" >${getCartTotal().toFixed(2)}</Text>
+              </HStack>
+              <HStack justifyContent="right">
+                <Text width="8rem">Tax</Text>
+                <Text align="right" width="8rem" >${(getCartTotal()*.075).toFixed(2)}</Text>
+              </HStack>
+              <HStack justifyContent="right" borderBottom="1px">
+                <Text width="8rem">Shipping</Text>
+                <Text align="right" width="8rem" >${(cartItemCount * .45).toFixed(2)}</Text>
+              </HStack>
+              <HStack justifyContent="right" fontSize="1.5rem" fontWeight="bold">
+                <Text width="8rem">Total</Text>
+                <Text align="right" width="8rem" >${(getCartTotal() + (getCartTotal()*.075) + (cartItemCount * .45)).toFixed(2)}</Text>
+              </HStack>
+            </VStack>
+          </Flex>
+        </Box>
+        <Flex 
+          justify={{
+            base: "center",
+            md: "end",
+            xl: "end"
+          }}
+          mt="1rem" 
+          borderTop="1px"
+        >
+          <Button my="1rem" mr="5%" size="lg" onClick={() => handleCheckout()}>Check Out</Button>
+      </Flex>
+      </Box>
+    </Box>
   )
 }
 

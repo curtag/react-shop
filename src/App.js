@@ -7,7 +7,8 @@ import Home from './pages/Home';
 import Shop from './pages/Shop';
 import Detail from './pages/Detail';
 import shopItems from './data/shopItems';
-import "./styles/index.css"
+import { Box } from '@chakra-ui/layout';
+// import "./styles/index.css"
 
 function App() {
   const [cartItems, setCartItems] = useState([]);
@@ -24,7 +25,6 @@ function App() {
   }
 
   const addToCart = (id, qty) => {
-    console.log('adding');
     //no items in cart add first item
     if (cartItems.length === 0){
       console.log(1);
@@ -53,24 +53,54 @@ function App() {
     return (cartItems.reduce(function (acc, obj) {return acc + (obj.qty * shopItems.filter((item) => item.id === parseInt(obj.id))[0].price)}, 0));
   }
 
-  const incrementItemCount = (qty, setQty) => {
+  const incrementItemCount = (qty, setQty, id) => {
     qty < 99 ? setQty(qty + 1) : setQty(99);
+    let newQty = 0;
+    if (qty < 99){
+      setQty(qty + 1);
+      newQty = qty + 1;
+    }else{
+      setQty(99);
+      newQty = 99;
+    }
+    if (id || id ===0 ){
+      addToCart(id, newQty === 0 ? 1 : newQty);
+    }
   }
 
-  const decrementItemCount = (qty, setQty) => {
-    qty > 0 ? setQty(qty - 1) : setQty(0);
+  const decrementItemCount = (qty, setQty, id) => {
+    let newQty = 0;
+    if (qty > 0){
+      setQty(qty-1);
+      newQty = qty -1;
+    } else {
+      setQty(0);
+      newQty = 0;
+    }
+    if (id || id === 0){
+      console.log(newQty)
+      addToCart(id, newQty === 0 ? 1 : newQty);
+    }
   }
 
-  const updateItemCount = (e, setQty) => {
+  const updateItemCount = (e, setQty, id, overwrite=false) => {
+    let newQty = 0;
     if (_.isNumber(parseInt(e.target.value))){
       setQty(parseInt(e.target.value));
+      newQty = parseInt(e.target.value);
     }else{
       setQty(0);
+      newQty = 0;
     }
     if(e.target.value < 0){
       setQty(0);
+      newQty = 0;
     }else if (e.target.value > 99){
       setQty(99);
+      newQty = 99;
+    }
+    if (overwrite){
+      addToCart(id, newQty);
     }
   }
 
@@ -80,7 +110,7 @@ function App() {
   },[cartItems]);
 
   return ( 
-    <BrowserRouter>
+    <Box as={BrowserRouter} backgroundColor="grey">
       <Header cartItemCount={cartItemCount}/>
       <Switch >
           <Route 
@@ -99,7 +129,7 @@ function App() {
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
                 updateItemQty={updateItemQty}
-
+                getCartTotal={getCartTotal}
               />
             )}
           />
@@ -124,7 +154,7 @@ function App() {
           </Route>
           <Route exact path="/" component={Home}></Route>
         </Switch>
-    </BrowserRouter>
+    </Box>
   );
 }
 

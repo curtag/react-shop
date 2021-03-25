@@ -1,11 +1,17 @@
+import {Heading, Box, Flex} from "@chakra-ui/react";
 import Item from "../components/shop/Item"
 
 const Shop = ({shopItems}) => {
 
   return (
-    <div className="shop-container">
-      <h1 className="shop-title">Shop</h1>
-      <div className="shop-items">
+    <Box pt="7rem">
+      <Heading textAlign="center" mb="3rem">Shop</Heading>
+      <Flex 
+        flexWrap="wrap" 
+        justifyContent="space-evenly" 
+        maxW="95%" 
+        mx="auto" 
+      >
         {shopItems.map(({id, name, image, price}) => 
         <Item 
           id={id} 
@@ -15,8 +21,8 @@ const Shop = ({shopItems}) => {
           price={price} 
         />
         )}
-      </div>
-    </div>
+      </Flex>
+    </Box>
   )
 }
 
