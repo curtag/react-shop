@@ -1,5 +1,4 @@
-import {Badge, Box, Container, Grid, GridItem, Heading, Image} from "@chakra-ui/react";
-import { transform } from "framer-motion";
+import {Badge, Grid, GridItem, Heading, Image} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const Item = ({id, name, image, price}) => {

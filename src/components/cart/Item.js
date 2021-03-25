@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { Box, Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
+import { Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
 import { useState } from "react";
 const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItemCount, getItemQty, removeFromCart}) => {
   // const id = match.params.id;

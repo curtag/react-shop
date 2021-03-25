@@ -78,7 +78,7 @@ const items = [
     name: 'Red Bell Pepper',
     image: redBellPepper,
     price: 1.89,
-    description: "The superior bell pepper, matured and subtly sweet with a tangy crisp bite. Works wonderfully uncooked in salads and is a versatile ingredient present in many prepared dishes. You should buy a lot of these bell peppers. If you don't buy enough of these peppers you might have difficulty checking out."
+    description: "The superior bell pepper. Matured to perfection, it has a captivating combination of sweetness and earthy tanginess. Works wonderfully uncooked in salads and is a versatile ingredient present in many prepared dishes. You should buy a lot of these bell peppers. If you don't buy enough of these peppers you might have difficulty checking out."
   },
 ]
 

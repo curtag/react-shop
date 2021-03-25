@@ -89,6 +89,12 @@ const Header = ({cartItemCount}) => {
               xl: "1.5rem"
             }} 
             fontWeight="bold"
+            _hover={{
+              transform: "scale(1.5)"
+            }}
+            _focus={{
+              outline: "0"
+            }}
           >
             Home
           </Link>
@@ -108,6 +114,12 @@ const Header = ({cartItemCount}) => {
               xl: "1.5rem"
             }}  
             fontWeight="bold"
+            _hover={{
+              transform: "scale(1.5)"
+            }}
+            _focus={{
+              outline: "0"
+            }}
           >
             Shop
           </Link>
@@ -119,11 +131,19 @@ const Header = ({cartItemCount}) => {
             }}
           />
           <Link as={RouterLink} to="/cart">
-            <Box transform={{
-              base: "scale(.75)",
-              md: "none",
-              xl: "none",
-            }}>
+            <Box 
+              transform={{
+                base: "scale(.75)",
+                md: "none",
+                xl: "none",
+              }}
+              _hover={{
+                transform: "scale(1.2)"
+              }}
+              _focus={{
+                outline: "0"
+              }}
+            >
               <BagText cartItemAmt={cartItemCount} />
               <BsBag 
                 fontSize="2.5rem"
