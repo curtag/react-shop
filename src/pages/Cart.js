@@ -43,32 +43,13 @@ const Cart = ({shopItems,
 
   const EmptyCart = () => {
     return (
-      <Heading as="h2" size="lg" fontWeight="normal">Your Bag is Empty</Heading>
+      <Heading as="h2" size="lg" fontWeight="normal" align="center" py="3rem" fontWeight="bold">Your Bag is Empty</Heading>
     )
   }
 
-  return (
-    <Box pt="8rem" backgroundColor="rgba(0,0,0, .125)" pb="3rem" minHeight="100vh">
-      <Box width="90%" mx="auto" backgroundColor="white" boxShadow="dark-lg" borderRadius="md">
-        <Box width="95%" mx="auto">
-          <Heading 
-            as="h1" 
-            size="lg" 
-            py={3} 
-            pt="2rem" 
-            borderBottom="1px"
-            textAlign={{
-              base: "center",
-              md: "center",
-              xl: "left"
-            }}
-          >
-            Items in Your Bag
-          </Heading>
-          <Box>
-            {shopItemsToRender.length !== 0 ? <ShopItems/> : <EmptyCart/>}
-          </Box>
-          <Flex 
+  const CartTotal = () => {
+    return (
+      <Flex 
             justifyContent="end"
             pt="1rem"
           >
@@ -104,8 +85,34 @@ const Cart = ({shopItems,
                 <Text align="right" width="8rem" >${(getCartTotalCost() + (getCartTotalCost()*.075) + (cartItemCount * .45)).toFixed(2)}</Text>
               </HStack>
             </VStack>
-          </Flex>
+        </Flex>
+    )
+  }
+
+  return (
+    <Box pt="8rem" backgroundColor="rgba(0,0,0, .125)" pb="3rem" minHeight="100vh">
+      <Box width="90%" mx="auto" backgroundColor="white" boxShadow="dark-lg" borderRadius="md">
+        <Box width="95%" mx="auto">
+          <Heading 
+            as="h1" 
+            size="lg" 
+            py={3} 
+            pt="2rem" 
+            borderBottom="1px"
+            textAlign={{
+              base: "center",
+              md: "center",
+              xl: "left"
+            }}
+          >
+            Items in Your Bag
+          </Heading>
+          <Box>
+            <ShopItems/>
+            {shopItemsToRender.length == 0 ? <EmptyCart/> : <CartTotal/>}
+          </Box>
         </Box>
+        {shopItemsToRender.length !== 0 ?
         <Flex 
           justify={{
             base: "center",
@@ -116,7 +123,7 @@ const Cart = ({shopItems,
           borderTop="1px"
         >
           <Button my="1rem" mr="5%" size="lg" onClick={() => handleCheckout()}>Check Out</Button>
-      </Flex>
+      </Flex> : <></>}
       </Box>
     </Box>
   )
