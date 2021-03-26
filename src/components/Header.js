@@ -4,7 +4,7 @@ import { Link, Box, Flex, Heading, Text, Spacer } from "@chakra-ui/react";
 import { BsBag } from "react-icons/bs";
 
 const Header = ({cartItemCount}) => {
-  const [isHome, setIsHome] = useState(false);
+  const [isHome, setIsHome] = useState(true);
   const location = useLocation();
 
   useEffect(()=>{
