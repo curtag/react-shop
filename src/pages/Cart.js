@@ -2,12 +2,25 @@ import { Button } from "@chakra-ui/button";
 import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
 import Item from "../components/cart/Item";
 
-const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, incrementItemCount, decrementItemCount, updateItemCount, addToCart, removeFromCart}) => {
+
+const Cart = ({shopItems, 
+  cartItems, 
+  getItemQty, 
+  getCartTotalCost, 
+  cartItemCount, 
+  incrementItemCount, 
+  decrementItemCount, 
+  updateItemCount, 
+  addToCart, 
+  removeFromCart, 
+  dispatchCartItems,
+  cI
+}) => {
   const cartIds =  cartItems.map((item) => item.id);
   const shopItemsToRender = shopItems.filter((item) => cartIds.includes(item.id.toString()));
 
   const handleCheckout = () => {
-    alert("You can't afford that. Lol.")
+    alert("Oopsies.")
   }
 
   const ShopItems = () => {
@@ -22,6 +35,7 @@ const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, in
           updateItemCount={updateItemCount} 
           addToCart={addToCart}
           removeFromCart={removeFromCart}
+          dispatchCartItems={dispatchCartItems}
         />
       ))
     )
@@ -34,7 +48,7 @@ const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, in
   }
 
   return (
-    <Box pt="8rem" backgroundColor="rgba(0,0,0, .125)" height="100%"  pb="3rem">
+    <Box pt="8rem" backgroundColor="rgba(0,0,0, .125)" pb="3rem" minHeight="100vh">
       <Box width="90%" mx="auto" backgroundColor="white" boxShadow="dark-lg" borderRadius="md">
         <Box width="95%" mx="auto">
           <Heading 
@@ -75,11 +89,11 @@ const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, in
             >
               <HStack justifyContent="right">
                 <Text width="8rem">Bag Subtotal</Text>
-                <Text align="right" width="8rem" >${getCartTotal().toFixed(2)}</Text>
+                <Text align="right" width="8rem" >${getCartTotalCost().toFixed(2)}</Text>
               </HStack>
               <HStack justifyContent="right">
                 <Text width="8rem">Tax</Text>
-                <Text align="right" width="8rem" >${(getCartTotal()*.075).toFixed(2)}</Text>
+                <Text align="right" width="8rem" >${(getCartTotalCost()*.075).toFixed(2)}</Text>
               </HStack>
               <HStack justifyContent="right" borderBottom="1px">
                 <Text width="8rem">Shipping</Text>
@@ -87,7 +101,7 @@ const Cart = ({shopItems, cartItems, getItemQty, getCartTotal, cartItemCount, in
               </HStack>
               <HStack justifyContent="right" fontSize="1.5rem" fontWeight="bold">
                 <Text width="8rem">Total</Text>
-                <Text align="right" width="8rem" >${(getCartTotal() + (getCartTotal()*.075) + (cartItemCount * .45)).toFixed(2)}</Text>
+                <Text align="right" width="8rem" >${(getCartTotalCost() + (getCartTotalCost()*.075) + (cartItemCount * .45)).toFixed(2)}</Text>
               </HStack>
             </VStack>
           </Flex>

@@ -1,8 +1,8 @@
-import { Badge, Image, Heading, Button, Input, HStack, Flex, Box, Text, Grid, GridItem } from "@chakra-ui/react";
+import { Image, Heading, Button, Input, Flex, Box, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Detail = ({match, cartItems, shopItems, setCartItems, getItemQty, incrementItemCount, decrementItemCount, updateItemCount, addToCart, updateItemQty, removeFromCart, getCartTotal}) => {
+const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, decrementItemCount, updateItemCount, addToCart, removeFromCart}) => {
   const id = match.params.id;
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price, description} = shopItem[0];
@@ -12,23 +12,17 @@ const Detail = ({match, cartItems, shopItems, setCartItems, getItemQty, incremen
 
   const handleAddClick = () => {
     addToCart(id, qty);
-    // setRemoveDisabled(!removeDisabled);
-    console.log('item qty: ');
-    console.log(getItemQty(id));
-
     setAddDisabled(true);
   }
 
   const handleRemoveClick = () => {
     removeFromCart(id);
-    
     // if statement fixes bug that would cause add/update button to continue to be displayed
     // after the item had been removed from cart while input displaying 0
     if (qty === 0){
       setAddDisabled(true);
     }else{
       setAddDisabled(false);
-
     }
     setRemoveDisabled(true);
   }
@@ -55,10 +49,6 @@ const Detail = ({match, cartItems, shopItems, setCartItems, getItemQty, incremen
     if (qty === 0 && getItemQty(id) === 0){
       setAddDisabled(true);
     }
-    // //if its enabled and qty is 0, disable
-    // if (!addDisabled && qty === 0 && getItemQty(id) === 0){
-    //   setAddDisabled(true);
-    // }
   }, [qty])
 
   return (
@@ -94,7 +84,6 @@ const Detail = ({match, cartItems, shopItems, setCartItems, getItemQty, incremen
           }}
         >
           <Text>{description}</Text>
-
         </Box>
         <Flex justifyContent="space-evenly">
           <Box>

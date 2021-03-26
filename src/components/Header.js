@@ -130,18 +130,21 @@ const Header = ({cartItemCount}) => {
               xl: "initial"
             }}
           />
-          <Link as={RouterLink} to="/cart">
+          <Link 
+            as={RouterLink} 
+            to="/cart"
+            _hover={{
+                transform: "scale(1.2)"
+            }}
+            _focus={{
+                outline: "0"
+            }}
+          >
             <Box 
               transform={{
                 base: "scale(.75)",
                 md: "none",
                 xl: "none",
-              }}
-              _hover={{
-                transform: "scale(1.2)"
-              }}
-              _focus={{
-                outline: "0"
               }}
             >
               <BagText cartItemAmt={cartItemCount} />

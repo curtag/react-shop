@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import _ from "lodash";
 import Header from './components/Header';
@@ -10,34 +10,36 @@ import shopItems from './data/shopItems';
 import { Box } from '@chakra-ui/layout';
 // import "./styles/index.css"
 
+function itemCountReducer(count, action){
+  switch(action.type){
+    case 'update':
+      return action.payload.cartItems.reduce(function (acc, obj) { return acc + obj.qty }, 0)
+    default:
+      return count
+  }
+}
+
 function App() {
   const [cartItems, setCartItems] = useState([]);
-  const [cartItemCount, setCartItemCount] = useState(0);
+
+  const [cartItemCount, dispatchItemCount] = useReducer(itemCountReducer, 0);
+  
 
   const getItemQty = (id) => {
     return (cartItems.filter((item) => item.id == id)[0])?.qty || 0
   }
 
-  const updateItemQty = (id, value) => {
-    const qty = getItemQty(id) + value;
-    const otherItems = (cartItems.filter((item) => item.id !== id.toString()));
-    setCartItems([...otherItems, {id: id.toString(), qty: qty}]);
-  }
-
   const addToCart = (id, qty) => {
     //no items in cart add first item
     if (cartItems.length === 0){
-      console.log(1);
       setCartItems([{id: id, qty: qty}]);
     }else{
       //we don't need to update any of our other items, only the current one
       const otherItems = (cartItems.filter((item) => item.id.toString() !== id.toString()));
       //Only add/keep items in cart that have a quantity
       if (qty !== 0){
-        console.log(2);
         setCartItems([...otherItems, {id: id.toString(), qty: qty}]);
       }else{
-        console.log(3);
         setCartItems([...otherItems]);
       }
     }
@@ -48,7 +50,7 @@ function App() {
     setCartItems(...[otherItems]);
   }
 
-  const getCartTotal = () => {
+  const getCartTotalCost = () => {
     // shopItems.filter((item) => item.id === parseInt(obj.id));
     return (cartItems.reduce(function (acc, obj) {return acc + (obj.qty * shopItems.filter((item) => item.id === parseInt(obj.id))[0].price)}, 0));
   }
@@ -106,11 +108,12 @@ function App() {
 
   useEffect(() => {
     //update item count (total quantity of all items) when items in cart change
-    setCartItemCount(cartItems.reduce(function (acc, obj) { return acc + obj.qty }, 0)); 
+    // setCartItemCount(cartItems.reduce(function (acc, obj) { return acc + obj.qty }, 0)); 
+    dispatchItemCount({type: 'update', payload: {cartItems: cartItems} })
   },[cartItems]);
 
   return ( 
-    <Box as={BrowserRouter} backgroundColor="grey">
+    <Box as={BrowserRouter} backgroundColor="grey" overflow="scroll">
       <Header cartItemCount={cartItemCount}/>
       <Switch >
           <Route 
@@ -121,15 +124,12 @@ function App() {
                 {...props}
                 cartItems={cartItems}
                 shopItems={shopItems}
-                setCartItems={setCartItems}
                 getItemQty={getItemQty}
                 incrementItemCount={incrementItemCount}
                 decrementItemCount={decrementItemCount}
                 updateItemCount={updateItemCount}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
-                updateItemQty={updateItemQty}
-                getCartTotal={getCartTotal}
               />
             )}
           />
@@ -141,7 +141,7 @@ function App() {
               cartItemCount={cartItemCount} 
               setCartItems={setCartItems} 
               getItemQty={getItemQty} 
-              getCartTotal={getCartTotal}
+              getCartTotalCost={getCartTotalCost}
               incrementItemCount={incrementItemCount}
               decrementItemCount={decrementItemCount}
               updateItemCount={updateItemCount}
