@@ -2,7 +2,7 @@ import { Image, Heading, Button, Input, Flex, Box, Text } from "@chakra-ui/react
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, decrementItemCount, updateItemCount, addToCart, removeFromCart}) => {
+const Detail = ({match, cartItems, shopItems,  getItemQty, addToCart, removeFromCart}) => {
   const id = match.params.id;
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price, description} = shopItem[0];
@@ -11,8 +11,10 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, d
   const [removeDisabled, setRemoveDisabled] = useState(true);
 
   const handleAddClick = () => {
-    addToCart(id, qty);
-    setAddDisabled(true);
+    if (qty >= 0 && qty < 99) {
+      addToCart(id, qty);
+      setAddDisabled(true);
+    }
   }
 
   const handleRemoveClick = () => {
@@ -25,6 +27,26 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, d
       setAddDisabled(false);
     }
     setRemoveDisabled(true);
+  }
+
+  const handleIncrement = () => {
+    if (qty < 99) {
+      setQty(qty + 1)
+    }else{
+      setQty(0)
+    }
+  }
+
+  const handleDecrement = () => {
+    if (qty > 0){
+      setQty(qty - 1);
+    }else{
+      setQty(0)
+    }
+  }
+
+  const handleInput = (e) => {
+    if (e.target.value <= 99 && e.target.value >= 0) setQty(parseInt(e.target.value));
   }
 
   //removefromcartbutton behavior
@@ -41,15 +63,15 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, d
 
   useEffect(()=>{
     //if it's disabled, enable it upon qty change
-    if (addDisabled){
-      setAddDisabled(false)
-    }
+    if (addDisabled) setAddDisabled(false)
 
     //if the displayed quantity is 0 and the set quantity is 0, disable
     if (qty === 0 && getItemQty(id) === 0){
       setAddDisabled(true);
     }
   }, [qty])
+
+  
 
   return (
     <Box pt="7rem" textAlign="center" margin="auto" width="95%">
@@ -91,9 +113,19 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, incrementItemCount, d
           </Box>
           <Box>
             <Flex justifyContent="center">
-              <Button roundedRight="0" onClick={() => decrementItemCount(qty, setQty)}>-</Button>
-              <Input textAlign="center" roundedRight="0" roundedLeft="0" maxW={14} min={0} max={99} defaultValue={qty} value={qty} onChange={(e) => updateItemCount(e, setQty)}></Input>
-              <Button roundedLeft="0" onClick={() => incrementItemCount(qty, setQty)}>+</Button>
+              <Button roundedRight="0" onClick={() => handleDecrement()}>-</Button>
+              <Input 
+                textAlign="center" 
+                roundedRight="0" 
+                roundedLeft="0" 
+                maxW={14} 
+                min={0} 
+                max={99} 
+                defaultValue={qty} 
+                value={qty} 
+                onChange={(e) => handleInput(e)}
+              />
+              <Button roundedLeft="0" onClick={() => handleIncrement()}>+</Button>
             </Flex>
           </Box>
           <Box>

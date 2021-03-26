@@ -22,7 +22,7 @@ function itemCountReducer(count, action){
 function App() {
   const [cartItems, setCartItems] = useState([]);
 
-  const [cartItemCount, dispatchItemCount] = useReducer(itemCountReducer, 0);
+  const [cartItemCount, dispatchCartItemCount] = useReducer(itemCountReducer, 0);
   
 
   const getItemQty = (id) => {
@@ -109,7 +109,7 @@ function App() {
   useEffect(() => {
     //update item count (total quantity of all items) when items in cart change
     // setCartItemCount(cartItems.reduce(function (acc, obj) { return acc + obj.qty }, 0)); 
-    dispatchItemCount({type: 'update', payload: {cartItems: cartItems} })
+    dispatchCartItemCount({type: 'update', payload: {cartItems: cartItems} })
   },[cartItems]);
 
   return ( 
@@ -125,9 +125,6 @@ function App() {
                 cartItems={cartItems}
                 shopItems={shopItems}
                 getItemQty={getItemQty}
-                incrementItemCount={incrementItemCount}
-                decrementItemCount={decrementItemCount}
-                updateItemCount={updateItemCount}
                 addToCart={addToCart}
                 removeFromCart={removeFromCart}
               />
@@ -147,6 +144,7 @@ function App() {
               updateItemCount={updateItemCount}
               addToCart={addToCart}
               removeFromCart={removeFromCart}
+              dispatchCartItemCount={dispatchCartItemCount}
             />
           </Route>
           <Route exact path="/shop">

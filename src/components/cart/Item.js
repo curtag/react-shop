@@ -3,16 +3,28 @@ import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
-const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItemCount, getItemQty, removeFromCart}) => {
+const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItemCount, getItemQty, removeFromCart, addToCart, cartItems, cartItemCount, dispatchItemCount}) => {
   // const id = match.params.id;
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price} = shopItem[0];
   const [qty, setQty] = useState(getItemQty(id));
 
+  const handleIncrement = () => {
+    console.log("gj");
+    setQty(qty + 1)
+    // addToCart(id, qty);
+  };
 
+  const handleDecrement = () => {};
+
+  const handleInput = () => {};
+
+  // useEffect(() => {
+  //   addToCart(id, qty)
+  // }, [qty, addToCart,])
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(10, 1fr)" borderBottom="1px" py="1rem">
       <GridItem  
@@ -170,6 +182,7 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
                 }}
                 roundedLeft="0" 
                 onClick={() => incrementItemCount(qty, setQty, id)}
+                // onClick={() => handleIncrement()}
               >
                 +
                   

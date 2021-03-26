@@ -7,14 +7,13 @@ const Cart = ({shopItems,
   cartItems, 
   getItemQty, 
   getCartTotalCost, 
-  cartItemCount, 
+  cartItemCount,
+  dispatchCartItemCount, 
   incrementItemCount, 
   decrementItemCount, 
   updateItemCount, 
   addToCart, 
-  removeFromCart, 
-  dispatchCartItems,
-  cI
+  removeFromCart,
 }) => {
   const cartIds =  cartItems.map((item) => item.id);
   const shopItemsToRender = shopItems.filter((item) => cartIds.includes(item.id.toString()));
@@ -35,7 +34,9 @@ const Cart = ({shopItems,
           updateItemCount={updateItemCount} 
           addToCart={addToCart}
           removeFromCart={removeFromCart}
-          dispatchCartItems={dispatchCartItems}
+          cartItems={cartItems}
+          cartItemCount={cartItemCount}
+          dispatchCartItemCount={dispatchCartItemCount}
         />
       ))
     )
