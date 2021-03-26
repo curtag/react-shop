@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/button";
-import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
+import { Box, Flex, Heading, HStack, Spacer, Text, VStack } from "@chakra-ui/layout";
 import Item from "../components/cart/Item";
 
 
@@ -38,12 +38,6 @@ const Cart = ({shopItems,
           dispatchCartItems={dispatchCartItems}
         />
       ))
-    )
-  }
-
-  const EmptyCart = () => {
-    return (
-      <Heading as="h2" size="lg" fontWeight="normal" align="center" py="3rem" fontWeight="bold">Your Bag is Empty</Heading>
     )
   }
 
@@ -105,11 +99,11 @@ const Cart = ({shopItems,
               xl: "left"
             }}
           >
-            Items in Your Bag
+            {shopItemsToRender.length !== 0 ? "Items in Your Bag" : "Your Bag is Empty"}
           </Heading>
           <Box>
             <ShopItems/>
-            {shopItemsToRender.length == 0 ? <EmptyCart/> : <CartTotal/>}
+            {shopItemsToRender.length !== 0 ? <CartTotal/> : <Box width="100%" py="2.5rem"/> }
           </Box>
         </Box>
         {shopItemsToRender.length !== 0 ?
