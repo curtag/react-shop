@@ -8,7 +8,6 @@ import Shop from './pages/Shop';
 import Detail from './pages/Detail';
 import shopItems from './data/shopItems';
 import { Box } from '@chakra-ui/layout';
-// import "./styles/index.css"
 
 function itemCountReducer(count, action){
   switch(action.type){
@@ -80,7 +79,6 @@ function App() {
       newQty = 0;
     }
     if (id || id === 0){
-      console.log(newQty)
       addToCart(id, newQty === 0 ? 1 : newQty);
     }
   }

@@ -13,7 +13,6 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
   const [qty, setQty] = useState(getItemQty(id));
 
   const handleIncrement = () => {
-    console.log("gj");
     setQty(qty + 1)
     // addToCart(id, qty);
   };
@@ -22,9 +21,7 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
 
   const handleInput = () => {};
 
-  // useEffect(() => {
-  //   addToCart(id, qty)
-  // }, [qty, addToCart,])
+
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(10, 1fr)" borderBottom="1px" py="1rem">
       <GridItem  

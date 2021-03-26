@@ -16,7 +16,6 @@ const Header = ({cartItemCount}) => {
   })
 
   const BagText = ({cartItemAmt}) => {
-    console.log(cartItemAmt)
     let cartItem;
     if (cartItemAmt >= 99){
       cartItem = <Text fontWeight="bold" fontSize=".85rem" position="absolute" mt=".9rem" ml=".6rem">99<sup>+</sup></Text>;
