@@ -113,7 +113,7 @@ function App() {
   },[cartItems]);
 
   return ( 
-    <Box as={BrowserRouter} basename={`/${process.env.PUBLIC_URL}`} backgroundColor="grey" overflow="scroll">
+    <Box as={BrowserRouter} basename={process.env.PUBLIC_URL} backgroundColor="grey" overflow="scroll">
       <Header cartItemCount={cartItemCount}/>
       <Switch >
           <Route 
