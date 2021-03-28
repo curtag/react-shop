@@ -1,7 +1,13 @@
-import {Badge, Grid, GridItem, Heading, Image} from "@chakra-ui/react";
+import {Badge, Grid, GridItem, Heading, Image, Tag, TagLabel} from "@chakra-ui/react";
+import { useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
+import {CartState} from "../../App";
 
 const Item = ({id, name, image, price}) => {
+  const cartState = useContext(CartState);
+  const getItemQty = useCallback(() => {
+    return (cartState.filter((item) => parseInt(item.id) === parseInt(id))[0])?.qty || 0
+  }, [cartState, id])
   return (
     <Link to={`shop/${id}`}>
       <Grid 
@@ -46,6 +52,24 @@ const Item = ({id, name, image, price}) => {
         }}
       >
         <GridItem rowSpan={2} alignSelf="center">
+          <Tag  
+            position="absolute"       
+            borderRadius="full"
+            variant="outline"
+            colorScheme={getItemQty() ? "green" : "blackAlpha"}
+            size="sm"
+            ml={{
+              base: "5.5rem",
+              md: "8rem",
+              xl: "12.75rem"
+            }}
+            mt={{
+              xl: "1rem"
+            }}
+          >
+            <TagLabel>{getItemQty()}</TagLabel>
+          </Tag>
+
           <Image 
             my={{
               base: "0rem",

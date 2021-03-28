@@ -1,4 +1,4 @@
-import { Image, Heading, Button, Input, Flex, Box, Text } from "@chakra-ui/react";
+import { Image, Heading, Button, Input, Flex, Box, Text, useToast } from "@chakra-ui/react";
 import { useEffect, useState, useCallback, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
 import shopItems from '../data/shopItems';
@@ -19,11 +19,20 @@ const Detail = ({match}) => {
   const [qty, setQty] = useState(getItemQty(id));
   const [addDisabled, setAddDisabled] = useState(true);
   const [removeDisabled, setRemoveDisabled] = useState(true);
+  const toast = useToast();
+
 
   const handleAddClick = () => {
     if (qty >= 0 && qty <= 99) {
       setAddDisabled(true);
       dispatchCart({type: "add", payload: {id: id, qty: qty}})
+      toast({
+        title: `${qty} ${name}`,
+        description: "Added To Bag",
+        status: "success",
+        duration: "3000",
+        isClosable: "true"
+      })
     }
   }
   const handleRemoveClick = () => {

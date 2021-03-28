@@ -9,6 +9,7 @@ import Detail from './pages/Detail';
 import shopItems from './data/shopItems';
 import { Box } from '@chakra-ui/layout';
 import "./data/fonts/fonts.css"
+import { useToast } from '@chakra-ui/toast';
 function itemCountReducer(count, action){
   switch(action.type){
     case 'update':

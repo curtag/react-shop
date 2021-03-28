@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { CartDispatch } from "../../App";
 import { CartState } from "../../App";
 import shopItems from '../../data/shopItems';
+import { useToast } from "@chakra-ui/toast";
 
 
 const Item = ({id}) => {
@@ -19,6 +20,7 @@ const Item = ({id}) => {
   const {name, image, price} = shopItem[0];
   const itemQty = useMemo(() => cartState.filter((item) => parseInt(item.id) === parseInt(id))[0]?.qty || 0, [cartState, id])
   const [qty, setQty] = useState(itemQty);
+  const toast = useToast();
 
 
   const handleIncrement = () => {
@@ -73,6 +75,12 @@ const Item = ({id}) => {
 
   const handleRemove = () => {
     dispatchCart({type: "delete", payload:{id:id}})
+    toast({
+      title: `${name} removed from bag.`,
+      status: "warning",
+      duration: "3000",
+      isClosable: "true"
+    })
   };
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(10, 1fr)" borderBottom="1px" py="1rem">
