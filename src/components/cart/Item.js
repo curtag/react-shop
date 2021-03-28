@@ -6,7 +6,7 @@ import { Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
 import _ from "lodash"
 import { useContext, useMemo, useState } from "react";
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { CartDispatch } from "../../App";
 import { CartState } from "../../App";
 import shopItems from '../../data/shopItems';
@@ -15,9 +15,9 @@ import shopItems from '../../data/shopItems';
 const Item = ({id}) => {
   const dispatchCart = useContext(CartDispatch)
   const cartState = useContext(CartState)
-  const shopItem = shopItems.filter((item) => item.id === parseInt(id));
+  const shopItem = shopItems.filter((item) => parseInt(item.id) === parseInt(id));
   const {name, image, price} = shopItem[0];
-  const itemQty = useMemo(() => cartState.filter((item) => item.id == id)[0]?.qty || 0, [cartState, id])
+  const itemQty = useMemo(() => cartState.filter((item) => parseInt(item.id) === parseInt(id))[0]?.qty || 0, [cartState, id])
   const [qty, setQty] = useState(itemQty);
 
 
@@ -39,21 +39,29 @@ const Item = ({id}) => {
   }
 
   const handleInput = (e) => {
-      if (_.isNumber(parseInt(e.target.value))){
-        setQty(parseInt(e.target.value));
-      }else{
-        setQty(1);
-      }
-      if(e.target.value <= 0){
-        setQty(1);
-      }else if (e.target.value > 99){
-        setQty(99);
-      }
+    if (_.isNumber(parseInt(e.target.value))){
+      setQty(parseInt(e.target.value));
+    }else{
+      setQty(1);
+    }
+    if(e.target.value <= 0){
+      setQty(1);
+    }else if (e.target.value > 99){
+      setQty(99);
+    }
+    if (e.target.value === ''){
+      setQty('');
+    }
   };
 
   const handleBlur = (e) => {
-    setQty(parseInt(e.target.value));
-    dispatchCart({type: "update", payload: {id: id, newQty: parseInt(e.target.value)}});
+    if (e.target.value === ''){
+      setQty('');
+      setQty(itemQty)
+    }else{
+      setQty(parseInt(e.target.value));
+      dispatchCart({type: "update", payload: {id: id, newQty: parseInt(e.target.value)}});
+    }
   }
 
   const handleKeyInput = (e) => {

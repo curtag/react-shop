@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, Link as RouterLink } from "react-router-dom";
-import { Link, Box, Flex, Heading, Text, Spacer, HStack, Icon} from "@chakra-ui/react";
+import { Link, Box, Flex, Heading, Text, Spacer, Icon} from "@chakra-ui/react";
 import { BsBag } from "react-icons/bs";
 import { GiBarn } from "react-icons/gi";
+import { CartState } from "../App";
 
-const Header = ({cartItemCount, dispatchCartItemCount, cartState}) => {
+const Header = ({cartItemCount, dispatchCartItemCount}) => {
+  const cartState = useContext(CartState)
   const [isHome, setIsHome] = useState(true);
   const location = useLocation();
 
@@ -14,11 +16,11 @@ const Header = ({cartItemCount, dispatchCartItemCount, cartState}) => {
     }else{
       setIsHome(false);
     }
-  })
+  }, [location.pathname])
 
   useEffect(() => {
     dispatchCartItemCount({type: 'update', payload: {cartItems: cartState} })
-  },[cartState]);
+  },[cartState, dispatchCartItemCount]);
 
   const BagText = ({cartItemAmt}) => {
     let cartItem;

@@ -104,22 +104,26 @@ function App() {
     <CartState.Provider value={cartState}>
       <CartDispatch.Provider value={dispatchCart}>
         <Box as={BrowserRouter} basename={process.env.PUBLIC_URL} backgroundColor="grey" overflow="scroll">
-          <Header cartItemCount={cartItemCount} dispatchCartItemCount={dispatchCartItemCount} cartState={cartState}/>
+          <Header 
+            cartItemCount={cartItemCount} 
+            dispatchCartItemCount={dispatchCartItemCount} 
+            cartState={cartState}
+          />
           <Switch >
               <Route 
                 exact 
                 path="/shop/:id" 
-                render={(props) => ( 
+                render={ routeProps => ( 
                   <Detail 
-                    {...props}
-                    shopItems={shopItems}
-                    dispatchCart={dispatchCart}
-                    cartState={cartState}
+                    {...routeProps}
                   />
                 )}
-              />
-              
-              <Route exact path="/cart">
+
+              />             
+              <Route 
+                exact 
+                path="/cart"
+              >
                 <Cart 
                   shopItems={shopItems} 
                   getCartTotalCost={getCartTotalCost}

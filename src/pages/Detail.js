@@ -1,13 +1,18 @@
 import { Image, Heading, Button, Input, Flex, Box, Text } from "@chakra-ui/react";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { Link, useHistory } from "react-router-dom";
+import shopItems from '../data/shopItems';
+import { CartDispatch } from "../App";
+import { CartState } from "../App";
 
-const Detail = ({match, shopItems, dispatchCart, cartState}) => {
+const Detail = ({match}) => {
+  const dispatchCart = useContext(CartDispatch)
+  const cartState = useContext(CartState)
   const id = match.params.id;
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price, description} = shopItem[0];
   const getItemQty = useCallback(() => {
-    return (cartState.filter((item) => item.id == id)[0])?.qty || 0
+    return (cartState.filter((item) => parseInt(item.id) === parseInt(id))[0])?.qty || 0
   }, [cartState, id])
 
   const history = useHistory();
@@ -16,15 +21,11 @@ const Detail = ({match, shopItems, dispatchCart, cartState}) => {
   const [removeDisabled, setRemoveDisabled] = useState(true);
 
   const handleAddClick = () => {
-    if (qty >= 0 && qty < 99) {
+    if (qty >= 0 && qty <= 99) {
       setAddDisabled(true);
       dispatchCart({type: "add", payload: {id: id, qty: qty}})
-      console.log(cartState)
     }
   }
-
-
-
   const handleRemoveClick = () => {
     dispatchCart({type: "delete", payload: {id: id}})
     // if statement fixes bug that would cause add/update button to continue to be displayed
@@ -54,7 +55,9 @@ const Detail = ({match, shopItems, dispatchCart, cartState}) => {
   }
 
   const handleInput = (e) => {
-    if (e.target.value <= 99 && e.target.value >= 0) setQty(parseInt(e.target.value));
+    if (e.target.value <= 99 && e.target.value >= 0 && parseInt(e.target.value)){
+      setQty(parseInt(e.target.value));
+    }
   }
 
   //removefromcartbutton behavior
@@ -145,7 +148,6 @@ const Detail = ({match, shopItems, dispatchCart, cartState}) => {
                 maxW={14} 
                 min={0} 
                 max={99} 
-                defaultValue={qty} 
                 value={qty} 
                 onChange={(e) => handleInput(e)}
               />
