@@ -21,7 +21,7 @@ const Detail = ({match}) => {
   const [removeDisabled, setRemoveDisabled] = useState(true);
 
   const handleAddClick = () => {
-    if (qty >= 0 && qty <= 99) {
+    if (qty >= 0 && qty <= 100) {
       setAddDisabled(true);
       dispatchCart({type: "add", payload: {id: id, qty: qty}})
     }
