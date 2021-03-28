@@ -1,24 +1,32 @@
 import { Image, Heading, Button, Input, Flex, Box, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { Link, useHistory } from "react-router-dom";
 
-const Detail = ({match, cartItems, shopItems,  getItemQty, addToCart, removeFromCart}) => {
+const Detail = ({match, shopItems, dispatchCart, cartState}) => {
   const id = match.params.id;
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price, description} = shopItem[0];
+  const getItemQty = useCallback(() => {
+    return (cartState.filter((item) => item.id == id)[0])?.qty || 0
+  }, [cartState, id])
+
+  const history = useHistory();
   const [qty, setQty] = useState(getItemQty(id));
   const [addDisabled, setAddDisabled] = useState(true);
   const [removeDisabled, setRemoveDisabled] = useState(true);
 
   const handleAddClick = () => {
     if (qty >= 0 && qty < 99) {
-      addToCart(id, qty);
       setAddDisabled(true);
+      dispatchCart({type: "add", payload: {id: id, qty: qty}})
+      console.log(cartState)
     }
   }
 
+
+
   const handleRemoveClick = () => {
-    removeFromCart(id);
+    dispatchCart({type: "delete", payload: {id: id}})
     // if statement fixes bug that would cause add/update button to continue to be displayed
     // after the item had been removed from cart while input displaying 0
     if (qty === 0){
@@ -33,7 +41,7 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, addToCart, removeFrom
     if (qty < 99) {
       setQty(qty + 1)
     }else{
-      setQty(0)
+      setQty(99)
     }
   }
 
@@ -55,10 +63,10 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, addToCart, removeFrom
     if (getItemQty(id) !== 0){
       setRemoveDisabled(false);
     }
-    if (cartItems.length === 0){
+    if (cartState.length === 0){
       setRemoveDisabled(true);
     }
-  },[cartItems, getItemQty, id])
+  },[cartState, getItemQty, id])
 
 
   useEffect(()=>{
@@ -76,13 +84,29 @@ const Detail = ({match, cartItems, shopItems,  getItemQty, addToCart, removeFrom
   return (
     <Box pt="7rem" textAlign="center" margin="auto" width="95%">
       <Box>
-        <Heading 
-          pb="1rem" 
-          as="h1" 
-          size="xl"
-        >
-          {name}
-        </Heading>
+
+          <Heading 
+            pb="1rem" 
+            as="h1" 
+            size="xl"
+          >
+            {name}
+          </Heading>
+          <Box textAlign="left" position="absolute">
+              <Button 
+                mt={{
+                  base:"100px",
+                  md: "125px",
+                  xl: "150px"
+                }}
+                size="xs" 
+                maxW="3rem" 
+                alignSelf="end"
+                onClick={() => history.goBack()}
+              >
+                Back
+              </Button>
+          </Box>
         <Image 
           boxSize={{
             base: "200px",

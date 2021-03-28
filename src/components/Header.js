@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useLocation, Link as RouterLink } from "react-router-dom";
-import { Link, Box, Flex, Heading, Text, Spacer } from "@chakra-ui/react";
+import { Link, Box, Flex, Heading, Text, Spacer, HStack, Icon} from "@chakra-ui/react";
 import { BsBag } from "react-icons/bs";
+import { GiBarn } from "react-icons/gi";
 
-const Header = ({cartItemCount}) => {
+const Header = ({cartItemCount, dispatchCartItemCount, cartState}) => {
   const [isHome, setIsHome] = useState(true);
   const location = useLocation();
 
@@ -14,6 +15,10 @@ const Header = ({cartItemCount}) => {
       setIsHome(false);
     }
   })
+
+  useEffect(() => {
+    dispatchCartItemCount({type: 'update', payload: {cartItems: cartState} })
+  },[cartState]);
 
   const BagText = ({cartItemAmt}) => {
     let cartItem;
@@ -53,17 +58,33 @@ const Header = ({cartItemCount}) => {
         xl: "nowrap"
       }}
     >
-      <Heading
+      <Flex 
+        alignItems="center" 
         as={RouterLink}
         to="/" 
-        ml={{
-          base: "none",
-          md: "15vw",
-          xl: "15vw"
-        }}
       >
-        Farm2Fam
-      </Heading>
+        <Icon 
+          as={GiBarn} 
+          ml={{
+            base: "none",
+            md: "15vw",
+            xl: "15vw"
+          }}
+          mr={{
+            base: ".5rem"
+          }}
+          mb={{
+            base: ".5rem"
+          }}
+          fontSize="2rem"
+        />
+        <Heading
+          fontFamily="Broadway"
+          size="2xl"
+        >
+          Farm2Fam
+        </Heading>
+      </Flex>
       <Flex 
         as="nav" 
         align="center" 

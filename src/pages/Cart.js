@@ -1,21 +1,17 @@
 import { Button } from "@chakra-ui/button";
-import { Box, Flex, Heading, HStack, Spacer, Text, VStack } from "@chakra-ui/layout";
+import { Box, Flex, Heading, HStack, Text, VStack } from "@chakra-ui/layout";
+import React from "react";
 import Item from "../components/cart/Item";
+import shopItems from '../data/shopItems';
 
 
-const Cart = ({shopItems, 
-  cartItems, 
-  getItemQty, 
+
+const Cart = ({
   getCartTotalCost, 
   cartItemCount,
-  dispatchCartItemCount, 
-  incrementItemCount, 
-  decrementItemCount, 
-  updateItemCount, 
-  addToCart, 
-  removeFromCart,
+  cartState
 }) => {
-  const cartIds =  cartItems.map((item) => item.id);
+  const cartIds =  cartState.map((item) => item.id);
   const shopItemsToRender = shopItems.filter((item) => cartIds.includes(item.id.toString()));
 
   const handleCheckout = () => {
@@ -26,17 +22,8 @@ const Cart = ({shopItems,
     return (
       shopItemsToRender.map((item) => (
         <Item 
+          key={item.id}
           id={item.id} 
-          getItemQty={getItemQty} 
-          shopItems={shopItems} 
-          incrementItemCount={incrementItemCount} 
-          decrementItemCount={decrementItemCount} 
-          updateItemCount={updateItemCount} 
-          addToCart={addToCart}
-          removeFromCart={removeFromCart}
-          cartItems={cartItems}
-          cartItemCount={cartItemCount}
-          dispatchCartItemCount={dispatchCartItemCount}
         />
       ))
     )
@@ -117,11 +104,20 @@ const Cart = ({shopItems,
           mt="1rem" 
           borderTop="1px"
         >
-          <Button my="1rem" mr="5%" size="lg" onClick={() => handleCheckout()}>Check Out</Button>
+          <Button 
+            my="1rem" 
+            mr={{
+              base: "0rem",
+              md: "0rem",
+              xl: "2rem"
+            }}
+            size="lg" 
+            onClick={() => handleCheckout()}
+          >Check Out</Button>
       </Flex> : <></>}
       </Box>
     </Box>
   )
 }
 
-export default Cart
+export default React.memo(Cart)

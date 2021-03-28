@@ -3,25 +3,69 @@ import { Image } from "@chakra-ui/image";
 import { Input } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import { Flex, Grid, GridItem, Heading, Text } from "@chakra-ui/layout";
-import { useEffect, useState } from "react";
+import _ from "lodash"
+import { useContext, useMemo, useState } from "react";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import { CartDispatch } from "../../App";
+import { CartState } from "../../App";
+import shopItems from '../../data/shopItems';
 
 
-const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItemCount, getItemQty, removeFromCart, addToCart, cartItems, cartItemCount, dispatchItemCount}) => {
-  // const id = match.params.id;
+const Item = ({id}) => {
+  const dispatchCart = useContext(CartDispatch)
+  const cartState = useContext(CartState)
   const shopItem = shopItems.filter((item) => item.id === parseInt(id));
   const {name, image, price} = shopItem[0];
-  const [qty, setQty] = useState(getItemQty(id));
+  const itemQty = useMemo(() => cartState.filter((item) => item.id == id)[0]?.qty || 0, [cartState, id])
+  const [qty, setQty] = useState(itemQty);
+
 
   const handleIncrement = () => {
-    setQty(qty + 1)
-    // addToCart(id, qty);
+    if (itemQty < 99){
+      dispatchCart({type: "increment", payload:{id: id, newQty: itemQty}})
+    }else{
+      dispatchCart({type: "update", payload:{id: id, newQty: 99}})
+    }
+  }
+
+  const handleDecrement = () => {
+    console.log(dispatchCart);
+    if (itemQty > 1){
+      dispatchCart({type: "decrement", payload:{id: id, newQty: itemQty}})
+    }else{
+      dispatchCart({type: "update", payload:{id: id, newQty: 1}})
+    }
+  }
+
+  const handleInput = (e) => {
+      if (_.isNumber(parseInt(e.target.value))){
+        setQty(parseInt(e.target.value));
+      }else{
+        setQty(1);
+      }
+      if(e.target.value <= 0){
+        setQty(1);
+      }else if (e.target.value > 99){
+        setQty(99);
+      }
   };
 
-  const handleDecrement = () => {};
+  const handleBlur = (e) => {
+    setQty(parseInt(e.target.value));
+    dispatchCart({type: "update", payload: {id: id, newQty: parseInt(e.target.value)}});
+  }
 
-  const handleInput = () => {};
+  const handleKeyInput = (e) => {
+    if (e.which < 48 || e.which > 57)
+    {
+        e.preventDefault();
+    }
+  }
 
-
+  const handleRemove = () => {
+    dispatchCart({type: "delete", payload:{id:id}})
+  };
   return (
     <Grid templateRows="repeat(3, 1fr)" templateColumns="repeat(10, 1fr)" borderBottom="1px" py="1rem">
       <GridItem  
@@ -38,7 +82,21 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
         justifySelf="center" 
         alignSelf="center"
       >
-        <Image 
+        <Link to={`/shop/${id}`}>
+          <Image 
+            src={image} 
+            alt={name} 
+            boxSize={{
+              base: "10.5rem",
+              md: "10.5rem",
+              xl: "14rem" 
+            }}
+            objectFit="contain" 
+            ignoreFallback
+          />
+        </Link>
+
+        {/* <Im 
           src={image} 
           alt={name} 
           boxSize={{
@@ -47,7 +105,17 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
             xl: "14rem" 
           }}
           objectFit="contain" 
-        />
+        /> */}
+        {/* <Im 
+          src={image} 
+          alt={name} 
+          boxSize={{
+            base: "10.5rem",
+            md: "10.5rem",
+            xl: "14rem" 
+          }}
+          objectFit="contain" 
+        /> */}
       </GridItem>
       <GridItem  
         rowSpan={{
@@ -92,9 +160,18 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
             alignSelf="end" 
             mb=".5rem"
           >
-            {name}
+            <Link to={`/shop/${id}`}>
+              {name}
+            </Link>
           </Heading>
-          <VStack mb=".5rem">
+          <VStack 
+            mb=".5rem"
+            width={{
+                base: '5rem',
+                md: '5rem',
+                xl: '5rem'
+            }}
+          >
             <Text 
               fontSize={{
                 base: "xx-small",
@@ -119,8 +196,8 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
           <VStack 
             mb=".5rem"
             ml={{
-              base: "1rem",
-              md: "1rem",
+              base: "0rem",
+              md: "0rem",
               xl: "0rem"
             }}
           >
@@ -145,7 +222,7 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
                   xl: "2rem"
                 }}
                 roundedRight="0" 
-                onClick={() => decrementItemCount(qty, setQty, id)}
+                onClick={handleDecrement}
               >
                 -
               </Button>
@@ -167,9 +244,11 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
                 maxW={14} 
                 min={0} 
                 max={99} 
-                defaultValue={qty} 
                 value={qty} 
-                onChange={(e) => updateItemCount(e, setQty, id, true)}
+                onChange={(e) => handleInput(e)}
+                onBlur={(e) => handleBlur(e)}
+                onKeyPress={(e) => handleKeyInput(e)}
+                onPaste={(e) => e.preventDefault()}
               />
               <Button 
                 height={{
@@ -178,22 +257,35 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
                   xl: "2rem"
                 }}
                 roundedLeft="0" 
-                onClick={() => incrementItemCount(qty, setQty, id)}
-                // onClick={() => handleIncrement()}
+                onClick={handleIncrement}
               >
                 +
                   
               </Button>
             </Flex>
           </VStack>
-          <VStack mb=".5rem" textAlign="center">
+          <VStack 
+            mb=".5rem" 
+            textAlign="right"
+            width={{
+                base: '5rem',
+                md: '5rem',
+                xl: '5rem'
+            }}
+          >
             <Text 
               fontSize={{
                 base: "xx-small",
                 md: "xx-small",
                 xl: "small"
-              }} 
+              }}
               color="grey"
+              maxWidth="4rem"
+              width={{
+                base: "initial",
+                md: "initial",
+                xl: "4rem"
+              }}
             >
               Total
             </Text>
@@ -207,7 +299,7 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
                 xl: "5rem"
               }}
             >
-              ${(price * getItemQty(id)).toFixed(2)}
+              ${(price * itemQty).toFixed(2)}
             </Text>
           </VStack>
         </Flex>
@@ -226,10 +318,13 @@ const Item = ({id, shopItems, incrementItemCount, decrementItemCount, updateItem
         }}
         mt="1rem"
       >
-        <Button  size="xs" onClick={() => removeFromCart(id)}>Remove</Button>
+        <Button  size="xs" onClick={() => handleRemove(id)}>Remove</Button>
       </GridItem>
     </Grid>
   )
 }
+const areEqual = (prevProps, nextProps) => {
+  return (prevProps.id === nextProps.id)
+};
 
-export default Item
+export default React.memo(Item, areEqual)
